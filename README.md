@@ -39,8 +39,7 @@ There is a bug somewhere in this repository.
 
 Your tasks:
 
-- Identify the bug through reading code and/or running tests.
-- Write tests that reproduce the bug (tests should fail on the current code).
+- Identify the bug.
 - Apply the smallest possible fix to make the tests pass.
 - Keep the change minimal and reviewable (no refactors).
 
