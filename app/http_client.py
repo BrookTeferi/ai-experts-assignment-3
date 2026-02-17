@@ -27,10 +27,25 @@ class Client:
             headers = {}
 
         if api:
-            if not self.oauth2_token or (
-                isinstance(self.oauth2_token, OAuth2Token) and self.oauth2_token.expired
-            ):
+            if not self.oauth2_token:
                 self.refresh_oauth2()
+
+            elif isinstance(self.oauth2_token, dict):
+                access_token = self.oauth2_token.get("access_token")
+                expires_at = self.oauth2_token.get("expires_at", 0)
+                
+                if not access_token or expires_at <= 0:
+                    self.refresh_oauth2()
+                else:
+                    # Convert dict to OAuth2Token for consistent handling
+                    self.oauth2_token = OAuth2Token(
+                        access_token=access_token,
+                        expires_at=expires_at
+                    )
+
+            elif isinstance(self.oauth2_token, OAuth2Token):
+                if self.oauth2_token.expired:
+                    self.refresh_oauth2()
 
             if isinstance(self.oauth2_token, OAuth2Token):
                 headers["Authorization"] = self.oauth2_token.as_header()
